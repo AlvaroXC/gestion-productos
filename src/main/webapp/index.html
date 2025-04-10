@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Productos y Pedidos</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Sistema de Gestión de Productos y Pedidos</h1>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-section="productos-list">Productos</a></li>
+                    <li><a href="#" class="nav-link" data-section="pedidos-list">Pedidos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Notificaciones -->
+        <div id="notification" class="notification"></div>
+        
+        <!-- Loader -->
+        <div id="loader" class="loader"></div>
+
+        <!-- Sección de Listado de Productos -->
+        <div id="productos-list" class="section active">
+            <div class="flex">
+                <h2>Listado de Productos</h2>
+                <button id="btn-add-producto" class="btn btn-success">Añadir Producto</button>
+            </div>
+            <table id="productos-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Datos de productos generados dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sección de Detalles de Producto -->
+        <div id="producto-detalle" class="section">
+            <div class="flex">
+                <h2>Detalles del Producto</h2>
+                <button class="btn" id="btn-volver-productos">Volver</button>
+            </div>
+            <div class="detail-container" id="producto-info">
+                <!-- Detalles del producto generados dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Sección de Formulario de Producto -->
+        <div id="producto-form-section" class="section">
+            <div class="flex">
+                <h2 id="producto-form-title">Añadir Producto</h2>
+                <button class="btn" id="btn-cancelar-producto">Cancelar</button>
+            </div>
+            <form id="producto-form">
+                <input type="hidden" id="producto-id">
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" name="descripcion" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" name="precio" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <input type="number" id="stock" name="stock" min="0" required>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </form>
+        </div>
+
+        <!-- Sección de Listado de Pedidos -->
+        <div id="pedidos-list" class="section">
+            <div class="flex">
+                <h2>Listado de Pedidos</h2>
+                <button id="btn-add-pedido" class="btn btn-success">Crear Pedido</button>
+            </div>
+            <table id="pedidos-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Datos de pedidos generados dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sección de Detalles de Pedido -->
+        <div id="pedido-detalle" class="section">
+            <div class="flex">
+                <h2>Detalles del Pedido</h2>
+                <button class="btn" id="btn-volver-pedidos">Volver</button>
+            </div>
+            <div class="detail-container" id="pedido-info">
+                <!-- Detalles del pedido generados dinámicamente -->
+            </div>
+            <div class="productos-pedido">
+                <h3>Productos en este pedido</h3>
+                <table id="detalle-pedido-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pedido-detalle-tbody">
+                        <!-- Detalle de productos en el pedido -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group" style="margin-top: 1rem;">
+                <label for="estado-pedido">Cambiar Estado:</label>
+                <select id="estado-pedido">
+                    <option value="PENDIENTE">PENDIENTE</option>
+                    <option value="PROCESANDO">PROCESANDO</option>
+                    <option value="COMPLETADO">COMPLETADO</option>
+                    <option value="CANCELADO">CANCELADO</option>
+                </select>
+                <button id="btn-actualizar-estado" class="btn btn-warning" style="margin-top: 0.5rem;">Actualizar Estado</button>
+            </div>
+        </div>
+
+        <!-- Sección de Formulario de Pedido -->
+        <div id="pedido-form-section" class="section">
+            <div class="flex">
+                <h2>Crear Pedido</h2>
+                <button class="btn" id="btn-cancelar-pedido">Cancelar</button>
+            </div>
+            <form id="pedido-form">
+                <div class="form-group">
+                    <label for="cliente">ID Cliente</label>
+                    <input type="text" id="cliente" name="cliente" required>
+                </div>
+                <h3>Productos para el pedido</h3>
+                <table id="productos-pedido-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Disponible</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Productos disponibles para el pedido -->
+                    </tbody>
+                </table>
+                <div id="productos-seleccionados">
+                    <h3>Productos seleccionados</h3>
+                    <table id="seleccionados-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Productos seleccionados para el pedido -->
+                        </tbody>
+                    </table>
+                    <div class="detail-item" style="justify-content: flex-end; margin-top: 1rem;">
+                        <div class="detail-label">Total:</div>
+                        <div id="total-pedido">0.00 €</div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" style="margin-top: 1rem;">Crear Pedido</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para confirmación de eliminación -->
+    <div id="modal-confirm" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar acción</h3>
+                <span class="close">&times;</span>
+            </div>
+            <p id="modal-message">¿Estás seguro de que quieres realizar esta acción?</p>
+            <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+                <button id="btn-modal-cancel" class="btn">Cancelar</button>
+                <button id="btn-modal-confirm" class="btn btn-danger">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/app.js"></script>
+</body>
+</html>
