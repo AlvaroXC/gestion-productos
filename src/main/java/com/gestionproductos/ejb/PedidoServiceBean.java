@@ -3,12 +3,12 @@ package com.gestionproductos.ejb;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import com.gestionproductos.entity.DetallePedido;
 import com.gestionproductos.entity.Pedido;
 import com.gestionproductos.entity.Producto;
@@ -23,7 +23,8 @@ public class PedidoServiceBean implements PedidoService {
 
     @Override
     public List<Pedido> findAllPedidos() {
-        return em.createQuery("SELECT p FROM Pedido p", Pedido.class).getResultList();
+        return em.createQuery("SELECT p FROM Pedido p LEFT JOIN FETCH p.detalles", Pedido.class)
+                .getResultList();
     }
 
     @Override
@@ -39,15 +40,27 @@ public class PedidoServiceBean implements PedidoService {
 
         // Verificar stock y actualizar inventario
         for (DetallePedido detalle : pedido.getDetalles()) {
-            Producto producto = productoService.findProductoById(detalle.getProducto().getId());
+            Long productoId = detalle.getProducto() != null ? detalle.getProducto().getId() : null;
+            if (productoId == null) {
+                throw new BussinessException("Falta el ID del producto en uno de los detalles");
+            }
+
+            Producto producto = productoService.findProductoById(productoId);
+            if (producto == null) {
+                throw new BussinessException("No existe un producto con ID " + productoId);
+            }
+
             if (producto.getStock() < detalle.getCantidad()) {
                 throw new BussinessException("Stock insuficiente para " + producto.getNombre());
             }
-            producto.setStock(producto.getStock() - detalle.getCantidad());
-            productoService.saveProducto(producto);
 
+            producto.setStock(producto.getStock() - detalle.getCantidad());
+            em.merge(producto); // usamos directamente em para consistencia
+
+            detalle.setProducto(producto); // asociar al producto gestionado
             detalle.setPrecioUnitario(producto.getPrecio());
             detalle.setPedido(pedido);
+
         }
 
         em.persist(pedido);

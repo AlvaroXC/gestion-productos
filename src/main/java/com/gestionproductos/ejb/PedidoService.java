@@ -2,11 +2,11 @@ package com.gestionproductos.ejb;
 
 import java.util.List;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Local;
 
 import com.gestionproductos.entity.Pedido;
 
-@Remote
+@Local
 public interface PedidoService {
     List<Pedido> findAllPedidos();
     Pedido findPedidoById(Long id);

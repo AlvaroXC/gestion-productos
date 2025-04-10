@@ -1,19 +1,20 @@
 package com.gestionproductos.rest;
 
 import java.util.List;
-
-import javax.ejb.EJB;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.MediaType;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.MediaType;
 import com.gestionproductos.ejb.ProductoService;
 import com.gestionproductos.entity.Producto;
 
 @Path("/productos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RequestScoped
 public class ProductoRestService {
-    @EJB
+    @Inject
     private ProductoService productoService;
 
     @GET

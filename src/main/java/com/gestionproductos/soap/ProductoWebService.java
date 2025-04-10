@@ -2,9 +2,9 @@ package com.gestionproductos.soap;
 
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.jws.WebMethod;
-import javax.jws.WebService;
+import jakarta.ejb.EJB;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebService;
 
 import com.gestionproductos.ejb.ProductoService;
 import com.gestionproductos.entity.Producto;
