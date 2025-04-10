@@ -29,7 +29,12 @@ public class PedidoServiceBean implements PedidoService {
 
     @Override
     public Pedido findPedidoById(Long id) {
-        return em.find(Pedido.class, id);
+
+        Pedido pedido = em.find(Pedido.class, id);
+        if (pedido != null && pedido.getDetalles() != null) {
+            pedido.getDetalles().size(); // Esto sí funcionará aquí
+        }
+        return pedido;
     }
 
     @Override

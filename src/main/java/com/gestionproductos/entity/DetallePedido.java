@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "detalles_pedido")
@@ -17,6 +18,7 @@ public class DetallePedido implements Serializable {
     @ManyToOne
     @JoinColumn(name = "pedido_id")
     @JsonBackReference
+    
     private Pedido pedido;
 
     @ManyToOne
@@ -36,6 +38,7 @@ public class DetallePedido implements Serializable {
         this.id = id;
     }
 
+    @XmlTransient
     public Pedido getPedido() {
         return pedido;
     }
